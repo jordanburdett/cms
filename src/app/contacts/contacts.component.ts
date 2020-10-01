@@ -26,9 +26,7 @@ export class ContactsComponent implements OnInit {
     ),
   ];
 
-  selectedContactIndex: number;
-  hasSelected: boolean = false;
-
+  selectedContact: Contact = null;
   constructor() {}
 
   ngOnInit(): void {}

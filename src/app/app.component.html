@@ -1,7 +1,9 @@
-<app-header></app-header>
+<app-header (linkClicked)="currentSelected = $event"></app-header>
 
 <div class="container">
-    <div class="row">
-        <app-contacts></app-contacts>
-    </div>
+  <div class="row">
+    <app-contacts *ngIf="currentSelected === 'contacts'"></app-contacts>
+    <app-documents *ngIf="currentSelected === 'documents'"></app-documents>
+    <app-messages *ngIf="currentSelected === 'messages'"></app-messages>
+  </div>
 </div>

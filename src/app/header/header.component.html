@@ -4,9 +4,9 @@
             <a class="navbar-brand" href="#">WeLearn CMS</a>
         </div>
         <ul class="nav navbar-nav">
-            <li><a>Documents</a></li>
-            <li><a>Messages</a></li>
-            <li><a>Contacts</a></li>
+            <li (click)="onLinkClicked('documents')"><a>Documents</a></li>
+            <li (click)="onLinkClicked('messages')"><a>Messages</a></li>
+            <li><a (click)="onLinkClicked('contacts')">Contacts</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

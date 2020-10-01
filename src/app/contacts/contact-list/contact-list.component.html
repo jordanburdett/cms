@@ -13,6 +13,7 @@
     <app-contact-list-item
       *ngFor="let contact of contacts"
       [contact]="contact"
+      (click)="onContactClicked(contact)"
     ></app-contact-list-item>
   </div>
 </div>
