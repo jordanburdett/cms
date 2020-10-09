@@ -1,13 +1,17 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <div class="row pad-left-right">
-      <span class="pull-left title padding">Add Documents</span>
-      <a class="btn btn-success pull-right padding">Add Document</a>
+      <span class="pull-left title">Documents</span>
+      <a class="btn btn-success pull-right">Add Document</a>
     </div>
   </div>
   <div class="panel-body">
     <div class="center-panel">
-      <app-document-list-item></app-document-list-item>
+      <app-document-list-item
+        *ngFor="let document of documents"
+        [document]="document"
+        (documentSelected)="onDocumentSelected($event)"
+      ></app-document-list-item>
     </div>
   </div>
 </div>

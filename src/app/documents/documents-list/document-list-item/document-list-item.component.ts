@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import Document from '../../documents.model';
 @Component({
   selector: 'app-document-list-item',
   templateUrl: './document-list-item.component.html',
-  styleUrls: ['./document-list-item.component.css']
+  styleUrls: ['./document-list-item.component.css'],
 })
 export class DocumentListItemComponent implements OnInit {
+  @Input() document: Document;
 
-  constructor() { }
+  @Output() documentSelected = new EventEmitter<Document>();
 
-  ngOnInit(): void {
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  onDocumentClick() {
+    this.documentSelected.emit(this.document);
   }
-
 }
