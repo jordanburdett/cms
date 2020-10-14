@@ -1,12 +1,9 @@
 <div class="container">
   <div class="row">
     <div class="col-md-5">
-      <app-contact-list
-        [contacts]="contacts"
-        (onSelected)="selectedContact = $event"
-      ></app-contact-list>
+      <app-contact-list></app-contact-list>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <app-contact-detail *ngIf="selectedContact" [contact]="selectedContact"></app-contact-detail>
     </div>
   </div>

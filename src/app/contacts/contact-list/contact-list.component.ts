@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import Contact from '../contact.model';
+import {ContactService} from '../contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -7,16 +8,18 @@ import Contact from '../contact.model';
   styleUrls: ['./contact-list.component.css'],
 })
 export class ContactListComponent implements OnInit {
-  @Input() contacts: Contact[];
+  contacts: Contact[] = [];
 
+  // tslint:disable-next-line:no-output-on-prefix
   @Output() onSelected = new EventEmitter<Contact>();
 
-  constructor() {}
+  constructor(private contactService: ContactService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.contacts = this.contactService.getContacts();
+  }
 
-  onContactClicked(contact: Contact) {
-    console.log("clicked")
-    this.onSelected.emit(contact);
+  onContactClicked(contact: Contact): void {
+    this.contactService.selectedContactEvent.emit(contact);
   }
 }
