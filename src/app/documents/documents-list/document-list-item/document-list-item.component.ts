@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import Document from '../../documents.model';
 @Component({
   selector: 'app-document-list-item',
@@ -8,13 +9,11 @@ import Document from '../../documents.model';
 export class DocumentListItemComponent implements OnInit {
   @Input() document: Document;
 
-  @Output() documentSelected = new EventEmitter<Document>();
-
-  constructor() {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {}
 
   onDocumentClick(): void {
-    this.documentSelected.emit(this.document);
+    this.router.navigate([`${this.document.id}`], { relativeTo: this.route });
   }
 }

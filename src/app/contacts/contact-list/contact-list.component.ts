@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import Contact from '../contact.model';
-import {ContactService} from '../contact.service';
+import { ContactService } from '../contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -10,16 +11,25 @@ import {ContactService} from '../contact.service';
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
 
-  // tslint:disable-next-line:no-output-on-prefix
-  @Output() onSelected = new EventEmitter<Contact>();
-
-  constructor(private contactService: ContactService) {}
+  constructor(
+    private contactService: ContactService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
+    // retrieve all the contacts
     this.contacts = this.contactService.getContacts();
+
+    // listen for changes in the contacts
+    this.contactService.onContactChange.subscribe((contacts) => {
+      this.contacts = contacts;
+    });
   }
 
-  onContactClicked(contact: Contact): void {
-    this.contactService.selectedContactEvent.emit(contact);
+  onAddContact(): void {
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
+
+  
 }

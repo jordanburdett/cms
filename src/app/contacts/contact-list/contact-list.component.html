@@ -5,7 +5,7 @@
         <h4>Contacts</h4>
       </div>
       <div class="col-xs-4">
-        <button class="btn btn-success">New Contact</button>
+        <button class="btn btn-success" (click)="onAddContact()">New Contact</button>
       </div>
     </div>
   </div>
@@ -13,7 +13,7 @@
     <app-contact-list-item
       *ngFor="let contact of contacts"
       [contact]="contact"
-      (click)="onContactClicked(contact)"
+      style="cursor: pointer;"
     ></app-contact-list-item>
   </div>
 </div>
