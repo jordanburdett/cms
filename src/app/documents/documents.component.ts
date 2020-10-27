@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentService } from './document.service';
-import Document from './documents.model';
 
 @Component({
   selector: 'app-documents',
@@ -8,7 +6,7 @@ import Document from './documents.model';
   styleUrls: ['./documents.component.css'],
 })
 export class DocumentsComponent implements OnInit {
-  constructor(private documentService: DocumentService) {}
+  constructor() {}
 
   ngOnInit(): void {}
 }

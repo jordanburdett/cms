@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import Contact from '../contact.model';
 import { ContactService } from '../contact.service';
 
@@ -8,8 +9,9 @@ import { ContactService } from '../contact.service';
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.css'],
 })
-export class ContactListComponent implements OnInit {
+export class ContactListComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];
+  contactsSub: Subscription;
 
   constructor(
     private contactService: ContactService,
@@ -22,14 +24,18 @@ export class ContactListComponent implements OnInit {
     this.contacts = this.contactService.getContacts();
 
     // listen for changes in the contacts
-    this.contactService.onContactChange.subscribe((contacts) => {
-      this.contacts = contacts;
-    });
+    this.contactsSub = this.contactService.onContactChange.subscribe(
+      (contacts) => {
+        this.contacts = contacts;
+      }
+    );
   }
 
   onAddContact(): void {
     this.router.navigate(['new'], { relativeTo: this.route });
   }
 
-  
+  ngOnDestroy() {
+    this.contactsSub.unsubscribe();
+  }
 }

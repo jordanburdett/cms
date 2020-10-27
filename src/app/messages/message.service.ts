@@ -1,13 +1,14 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import Message from './message.model';
-import {MOCKMESSAGES} from './MOCKMESSAGES';
+import { MOCKMESSAGES } from './MOCKMESSAGES';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
   messages: Message[] = [];
-  messagesChangedEvent = new EventEmitter<Message[]>();
+  messagesChangedEvent = new Subject<Message[]>();
 
   constructor() {
     this.messages = MOCKMESSAGES;
@@ -18,13 +19,13 @@ export class MessageService {
   }
 
   getMessage(id: string): Message {
-    return this.messages.find(message => message.id === id);
+    return this.messages.find((message) => message.id === id);
   }
 
   addMessage(message: Message): void {
     this.messages.push(message);
     console.log(message);
-    this.messagesChangedEvent.emit(this.messages);
+    this.messagesChangedEvent.next(this.messages);
   }
 
   getCurrentlength(): number {
