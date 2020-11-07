@@ -1,1 +1,71 @@
-<p>document-edit works!</p>
+<div class="panel panel-default">
+    <div class="panel-body">
+  
+      <form id="document-edit" #editForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="name">Document Title:</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              size="120"
+              max="120"
+              ngModel
+              name="name"
+              required
+              #name="ngModel"
+              >
+               
+            <p *ngIf="name.invalid && name.touched" class="error">Title is required</p>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="description">Document Description:</label>
+            <input
+              type="text"
+              id="description"
+              class="form-control"
+              size="120"
+              max="255"
+              ngModel
+              name="description"
+              required
+              #description="ngModel">
+              <p *ngIf="description.invalid && description.touched" class="error">Description is required</p>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="url">Document URL:</label>
+            <input
+              type="text"
+              id="url"
+              class="form-control"
+              size="150"
+              max="255"
+              ngModel
+              name="url"
+              required
+              #url="ngModel">
+              <p *ngIf="url.invalid && url.touched" class="error">URL is required</p>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-xs-12 btn-toolbar">
+            <button class="btn btn-success" type="submit" [disabled]="editForm.invalid" *ngIf="editMode">Update</button>
+            <button class="btn btn-success" type="submit" [disabled]="editForm.invalid" *ngIf="!editMode">Save</button>
+            <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+          </div>
+        </div>
+  
+      </form>
+  
+    </div>
+  </div>
+  
+  

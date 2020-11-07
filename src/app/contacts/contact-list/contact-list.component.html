@@ -9,11 +9,8 @@
       </div>
     </div>
   </div>
-  <div class="panel-body">
-    <app-contact-list-item
-      *ngFor="let contact of contacts"
-      [contact]="contact"
-      style="cursor: pointer;"
-    ></app-contact-list-item>
+  <div class="panel-body" cdkDropList [cdkDropListData]="this.contacts">
+    <app-contact-list-item *ngFor="let contact of contacts" [contact]="contact" style="cursor: pointer;">
+    </app-contact-list-item>
   </div>
 </div>

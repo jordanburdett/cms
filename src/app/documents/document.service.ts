@@ -32,16 +32,21 @@ export class DocumentService {
   }
 
   // updates a document at the location of the original document passed in
-  updateDocument(orginalDocument: Document, newDocument: Document) {
-    if (orginalDocument === null || newDocument === null) {
+  updateDocument(originalDocument: Document, newDocument: Document) {
+    if (originalDocument === null || newDocument === null) {
+      console.log("THeyre null");
       return;
     }
 
     // get the index of the original document
-    const index = this.documents.indexOf(orginalDocument);
+    const index = this.documents.indexOf(originalDocument);
     if (index < 0) {
+      console.log("Can't find index of original");
+      console.log(originalDocument);
+      console.log(this.documents);
       return;
     }
+    newDocument.id = this.documents[index].id;
 
     this.documents[index] = newDocument;
 

@@ -32,7 +32,7 @@ export class ContactService {
   }
 
   addContact(contact: Contact) {
-    if (Contact === null) {
+    if (!contact) {
       return;
     }
 
@@ -46,6 +46,7 @@ export class ContactService {
     // update all that are subscibed with the new Contact list.
     const ContactClone = this.contacts.slice();
     this.onContactChange.next(ContactClone);
+    
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -57,7 +58,7 @@ export class ContactService {
     if (pos < 0) {
       return;
     }
-
+    newContact.id = this.contacts[pos].id;
     this.contacts[pos] = newContact;
     
     const contactsClone = this.contacts.slice();
