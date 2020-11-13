@@ -27,6 +27,11 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     this.selectedContactSub = this.route.params.subscribe((param: Params) => {
       this.id = param['id'];
       this.contact = this.contactService.getContact(this.id);
+      console.log("CONTACT");
+      console.log(this.contact);
+      if (!this.contact) {
+        this.router.navigate(["/contacts"]);
+      }
     });
   }
 

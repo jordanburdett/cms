@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import Contact from './contact.model';
@@ -6,7 +7,7 @@ import { MOCKCONTACTS } from './MOCKCONTACTS';
 @Injectable({
   providedIn: 'root',
 })
-export class ContactService {
+export class ContactService  {
   // Properties
 
   private contacts: Contact[] = [];
@@ -16,9 +17,30 @@ export class ContactService {
 
   // constructors
 
-  constructor() {
-    this.contacts = MOCKCONTACTS;
-    this.maxContactId = this.getMaxId();
+  constructor(private http: HttpClient) {
+    this.contacts = [];
+    
+    // get the data from firebase
+    this.http.get("https://cms-fullstack-class.firebaseio.com/contacts.json").subscribe((contacts: Contact[]) => {
+      this.contacts = contacts.sort((a, b): number => {
+        if (a.name < b.name) {
+          return -1;
+        }
+
+        if (a.name > b.name) {
+          return 1;
+        }
+
+        return 0;
+      });
+      
+      
+      this.maxContactId = this.getMaxId();
+
+      this.onContactChange.next(this.contacts.slice());
+    }, (error) => {
+      console.log(error.message);
+    })
   }
 
   // methods
@@ -46,7 +68,18 @@ export class ContactService {
     // update all that are subscibed with the new Contact list.
     const ContactClone = this.contacts.slice();
     this.onContactChange.next(ContactClone);
+
+    this.pushToFirebase(this.contacts);
     
+    
+  }
+
+  pushToFirebase(contacts: Contact[]) {
+    // push all the contacts to firebase again.
+    this.http.put("https://cms-fullstack-class.firebaseio.com/contacts.json", contacts).subscribe((result) => {
+      console.log("after put");
+      console.log(result);
+    })
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -63,6 +96,8 @@ export class ContactService {
     
     const contactsClone = this.contacts.slice();
     this.onContactChange.next(contactsClone);
+
+    this.pushToFirebase(this.contacts);
   }
 
   deleteContact(contact: Contact) {
@@ -73,6 +108,8 @@ export class ContactService {
     }
     this.contacts.splice(index, 1);
     this.onContactChange.next(this.contacts.slice());
+
+    this.pushToFirebase(this.contacts);
   }
 
   getMaxId(): number {
