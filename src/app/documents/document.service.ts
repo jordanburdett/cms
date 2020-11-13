@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import Document from './documents.model';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +15,36 @@ export class DocumentService {
   maxDocumentId: number;
 
   // constructors
-  constructor() {
-    this.documents = MOCKDOCUMENTS;
+  constructor(private http: HttpClient) {
+    this.documents = [];
     this.maxDocumentId = this.getMaxId();
+
+    this.http
+      .get('https://cms-fullstack-class.firebaseio.com/documents.json')
+      .subscribe((documents: Document[]) => {
+        this.documents = documents;
+        this.maxDocumentId = this.getMaxId();
+
+        this.documentChangedEvent.next(this.documents.slice());
+      });
   }
 
   // methods
-  
+
+  // pushes all the documents to firebase
+  pushToFirebase(documents: Document[]) {
+    // push all the contacts to firebase again.
+    this.http
+      .put(
+        'https://cms-fullstack-class.firebaseio.com/documents.json',
+        documents
+      )
+      .subscribe((result) => {
+        console.log('after put');
+        console.log(result);
+      });
+  }
+
   // returns all the documents
   getDocuments(): Document[] {
     return this.documents.slice();
@@ -34,7 +58,7 @@ export class DocumentService {
   // updates a document at the location of the original document passed in
   updateDocument(originalDocument: Document, newDocument: Document) {
     if (originalDocument === null || newDocument === null) {
-      console.log("THeyre null");
+      console.log('THeyre null');
       return;
     }
 
@@ -53,6 +77,8 @@ export class DocumentService {
     // make a copy and inform those subscribed to the change
     const documentClone = this.documents.slice();
     this.documentChangedEvent.next(documentClone);
+
+    this.pushToFirebase(this.documents);
   }
 
   // deletes the document passed in
@@ -66,6 +92,8 @@ export class DocumentService {
     }
     this.documents.splice(pos, 1);
     this.documentChangedEvent.next(this.documents.slice());
+
+    this.pushToFirebase(this.documents);
   }
 
   // adds a new document with a verified id
@@ -84,6 +112,8 @@ export class DocumentService {
     // update all that are subscibed with the new document list.
     const documentClone = this.documents.slice();
     this.documentChangedEvent.next(documentClone);
+
+    this.pushToFirebase(this.documents);
   }
 
   // Calculates the max id in the current list of Documents
