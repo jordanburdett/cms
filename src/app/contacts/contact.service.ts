@@ -33,7 +33,7 @@ export class ContactService  {
 
         return 0;
       });
-      
+
       
       this.maxContactId = this.getMaxId();
 
