@@ -45,9 +45,9 @@ app.use(express.static(path.join(__dirname, 'dist/cms')));
 
 // Tell express to map the default route ('/') to the index route
 app.use('/', index);
-app.use('/messages', messagesRoute);
-app.use('/contacts', contactsRoute);
-app.use('/documents', documentsRoute);
+app.use('/api/messages', messagesRoute);
+app.use('/api/contacts', contactsRoute);
+app.use('/api/documents', documentsRoute);
 
 // ... ADD YOUR CODE TO MAP YOUR URL'S TO ROUTING FILES HERE ...
 
