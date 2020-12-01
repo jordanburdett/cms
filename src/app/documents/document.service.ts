@@ -20,7 +20,7 @@ export class DocumentService {
     this.maxDocumentId = this.getMaxId();
 
     this.http
-      .get('https://cms-fullstack-class.firebaseio.com/documents.json')
+      .get('http://localhost:3000/api/documents')
       .subscribe((documents: Document[]) => {
         this.documents = documents;
         this.maxDocumentId = this.getMaxId();
@@ -78,7 +78,16 @@ export class DocumentService {
     const documentClone = this.documents.slice();
     this.documentChangedEvent.next(documentClone);
 
-    this.pushToFirebase(this.documents);
+    // update the document
+    this.http
+      .put(
+        'http://localhost:3000/api/documents?id=' + newDocument.id,
+        {...newDocument}
+      )
+      .subscribe((result) => {
+        console.log('after put');
+        console.log(result);
+      });
   }
 
   // deletes the document passed in
@@ -93,7 +102,9 @@ export class DocumentService {
     this.documents.splice(pos, 1);
     this.documentChangedEvent.next(this.documents.slice());
 
-    this.pushToFirebase(this.documents);
+    this.http.delete("http://localhost:3000/api/documents?id=" + document.id).subscribe(result => {
+      console.log(result);
+    })
   }
 
   // adds a new document with a verified id
@@ -113,7 +124,9 @@ export class DocumentService {
     const documentClone = this.documents.slice();
     this.documentChangedEvent.next(documentClone);
 
-    this.pushToFirebase(this.documents);
+    this.http.post("http://localhost:3000/api/documents", { ... document }).subscribe(result => {
+      console.log(result);
+    })
   }
 
   // Calculates the max id in the current list of Documents

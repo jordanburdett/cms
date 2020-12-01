@@ -21,7 +21,9 @@ export class ContactService  {
     this.contacts = [];
     
     // get the data from firebase
-    this.http.get("https://cms-fullstack-class.firebaseio.com/contacts.json").subscribe((contacts: Contact[]) => {
+    this.http.get("http://localhost:3000/api/contacts").subscribe((contacts: Contact[]) => {
+     console.log(contacts);
+
       this.contacts = contacts.sort((a, b): number => {
         if (a.name < b.name) {
           return -1;
@@ -69,7 +71,9 @@ export class ContactService  {
     const ContactClone = this.contacts.slice();
     this.onContactChange.next(ContactClone);
 
-    this.pushToFirebase(this.contacts);
+    this.http.post("http://localhost:3000/api/contacts", { ...contact }).subscribe(result => {
+      console.log(result);
+    }) 
     
     
   }
@@ -97,7 +101,9 @@ export class ContactService  {
     const contactsClone = this.contacts.slice();
     this.onContactChange.next(contactsClone);
 
-    this.pushToFirebase(this.contacts);
+    this.http.put("http://localhost:3000/api/contacts?id=" + newContact.id, {...newContact}).subscribe(result => {
+      console.log(result);
+    })
   }
 
   deleteContact(contact: Contact) {
@@ -109,7 +115,7 @@ export class ContactService  {
     this.contacts.splice(index, 1);
     this.onContactChange.next(this.contacts.slice());
 
-    this.pushToFirebase(this.contacts);
+    this.http.delete("http://localhost:3000/api/contacts?id=" + contact.id).subscribe(result => console.log(result));
   }
 
   getMaxId(): number {

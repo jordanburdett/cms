@@ -13,13 +13,9 @@ export class MessageService {
   messagesChangedEvent = new Subject<Message[]>();
 
   constructor(private http: HttpClient, private contactService: ContactService) {
-    this.http.get("https://cms-fullstack-class.firebaseio.com/messages.json").subscribe((messages: Message[]) => {
-      messages.forEach(message => {
-        message.sender = contactService.getContact(String(message.id)).name;
-      })
-      
+    this.http.get("http://localhost:3000/api/messages").subscribe((messages: Message[]) => {
       this.messages = messages;
-      this.messagesChangedEvent.next(messages.slice());
+      this.messagesChangedEvent.next(this.messages.slice());
     })
   }
 
@@ -32,12 +28,13 @@ export class MessageService {
   }
 
   addMessage(message: Message): void {
+    message.sender = "Jordan";
     this.messages.push(message);
     console.log(message);
     this.messagesChangedEvent.next(this.messages);
 
-    this.http.put("https://cms-fullstack-class.firebaseio.com/messages.json", this.messages).subscribe((result) => {
-      console.log("updates on firebase ");
+    message.sender = "107";
+    this.http.post("http://localhost:3000/api/messages", { ...message }).subscribe((result) => {
       console.log(result);
     })
   }
